@@ -1,16 +1,11 @@
 import express from "express";
-import {
-  loginUser,
-  logout,
-  registerUser,
-} from "../controllers/user.controller.js";
+import { deleteUser, updateUser } from "../controllers/user.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
-import { admin, auth } from "../middlewares/auth.js";
+import { auth } from "../middlewares/auth.js";
 
 const router = express.Router();
 
-router.post("/register", upload.single("avatar"), registerUser);
-router.post("/login", loginUser);
-router.post("/logout", logout);
+router.put("/:id", auth, upload.single("avatar"), updateUser);
+router.delete("/:id", auth, deleteUser);
 
 export default router;
