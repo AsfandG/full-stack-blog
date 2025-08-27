@@ -9,7 +9,7 @@ import { uploadToCloudinary } from "../utils/cloudinary.js";
 import jwt from "jsonwebtoken";
 
 export const registerUser = asyncHandler(async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, role } = req.body;
 
   if ([name, email, password].some((field) => field?.trim() === "")) {
     return res
@@ -41,6 +41,7 @@ export const registerUser = asyncHandler(async (req, res) => {
     name,
     email,
     password: hashedPassword,
+    role,
     ...(avatarData && { avatar: avatarData }),
   });
 
