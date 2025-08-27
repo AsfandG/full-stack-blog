@@ -28,11 +28,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.get("/", auth, (req, res) => {
-  res.send({ message: "Hello from Node.js + Express + MongoDB 🚀" });
+  res
+    .status(200)
+    .json({ message: "Hello from Node.js + Express + MongoDB 🚀" });
 });
 
 app.use("/api/auth", authRoutes);
-app.use("/api/user", userRoutes);
+app.use("/api/users", userRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);

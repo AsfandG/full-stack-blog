@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import { v2 as cloudinary } from "cloudinary";
 import { generateAccessToken } from "../utils/generate-token.js";
 import { uploadToCloudinary } from "../utils/cloudinary.js";
+import Post from "../models/post.model.js";
 
 // Update User
 export const updateUser = asyncHandler(async (req, res) => {
@@ -66,6 +67,15 @@ export const deleteUser = asyncHandler(async (req, res) => {
     });
   }
 
+  const user = await User.findById(id);
+
+  if (!user) {
+    return res.status(403).json({
+      success: false,
+      message: "User not found!",
+    });
+  }
+  await Post.deleteMany({ username: user.name });
   const deleteUser = await User.findByIdAndDelete(id);
 
   if (!deleteUser) {
@@ -78,4 +88,32 @@ export const deleteUser = asyncHandler(async (req, res) => {
     success: true,
     message: "User deleted successfully",
   });
+});
+
+export const getUsersList = asyncHandler(async (req, res) => {
+  const users = await User.find();
+
+  if (!users) {
+    return res.status(404).json({
+      success: false,
+      message: "Users not found",
+    });
+  }
+
+  res.status(200).json({ success: true, users });
+});
+
+export const getUser = asyncHandler(async (req, res) => {
+  const id = req.params.id;
+
+  const user = await User.findById(id).select("-password");
+
+  if (!user) {
+    return res.status(404).json({
+      success: false,
+      message: "User not found",
+    });
+  }
+
+  res.status(200).json({ success: true, user });
 });

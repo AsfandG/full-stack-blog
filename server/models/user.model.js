@@ -23,6 +23,9 @@ const userSchema = new mongoose.Schema(
       url: String,
       public_id: String,
     },
+    refreshToken: {
+      type: String,
+    },
   },
   { timestamps: true }
 );
